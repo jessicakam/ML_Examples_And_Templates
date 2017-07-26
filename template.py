@@ -25,7 +25,7 @@ class DataPreprocessing():
         imputer = imputer.fit(self.X[:, index_start_fill:index_end_fill])
         self.X[:, index_start_fill: index_end_fill] = imputer.transform(self.X[:, index_start_fill:index_end_fill])
     
-    def splitIntoTrainingAndTestSet(self, test_size=0.2, random_state=0, *args, **kwargs):
+    def splitIntoTrainingAndTestSets(self, test_size=0.2, random_state=0, *args, **kwargs):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, *args, **kwargs) 
         
     def featureScaling(self):
@@ -52,11 +52,11 @@ class SimpleLinearRegression(DataPreprocessing):
         self.y_pred = self.regressor.predict(self.X_test)
         
     def visualizeTrainingSetResults(self, color1='red', color2='blue', title='Salary vs Exp (training)', xlabel='Years of Exp', ylabel='Salary'):
-        plt.scatter(self.X_test, self.y_test, color=color1)
+        plt.scatter(self.X_train, self.y_train, color=color1)
         plt.plot(self.X_train, self.regressor.predict(self.X_train), color=color2)
         plt.title(title)
         plt.xlabel(xlabel)
-        plt.ylavel(ylabel)
+        plt.ylabel(ylabel)
         plt.show()
         
     def visualizeTestSetResults(self, color1='red', color2='blue', title='Salary vs Exp (test)', xlabel='Years of Exp', ylabel='Salary'):
@@ -65,16 +65,20 @@ class SimpleLinearRegression(DataPreprocessing):
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
+        plt.show()
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+dummy = SimpleLinearRegression()
+dummy.importDataset('Salary_Data.csv')
+#dummy.fillInMissingData()
+dummy.splitIntoTrainingAndTestSets(test_size=1/3, random_state=0)
+#dummy.featureScaling()
+dummy.fitToTrainingSet()
+dummy.predictingTestSetResults()
+dummy.visualizeTrainingSetResults()
+dummy.visualizeTestSetResults()
+
+
+
+
+
