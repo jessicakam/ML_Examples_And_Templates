@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler, Imputer
+from sklearn.preprocessing import StandardScaler, Imputer, LabelEncoder, OneHotEncoder
 
 class DataPreprocessing():
     def __init__(self):
@@ -25,6 +25,16 @@ class DataPreprocessing():
         imputer = imputer.fit(self.X[:, index_start_fill:index_end_fill])
         self.X[:, index_start_fill: index_end_fill] = imputer.transform(self.X[:, index_start_fill:index_end_fill])
     
+    def independentVariableEncodeCategoricalData(self, column_to_encode=0):
+        labelencoder_X = LabelEncoder()
+        self.X[:, column_to_encode] = labelencoder_X.fit_transform(self.X[:, column_to_encode])
+        onehotencoder = OneHotEncoder(categorical_features=[column_to_encode])
+        self.X = onehotencoder.fit_transform(self.X).toarray()
+    
+    def dependentVariableEncodeCategoricalData(self):
+        labelencoder_y = LabelEncoder()
+        self.y = labelencoder_y.fit_transform(self.y)
+        
     def splitIntoTrainingAndTestSets(self, test_size=0.2, random_state=0, *args, **kwargs):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, *args, **kwargs) 
         
@@ -68,10 +78,12 @@ class SimpleLinearRegression(DataPreprocessing):
         plt.show()
         
         
-dummy = SimpleLinearRegression()
-dummy.importDataset('Salary_Data.csv')
-#dummy.fillInMissingData()
-dummy.splitIntoTrainingAndTestSets(test_size=1/3, random_state=0)
+dummy = DataPreprocessing()
+dummy.importDataset('Data.csv')
+dummy.fillInMissingData()
+dummy.independentVariableEncodeCategoricalData()
+dummy.dependentVariableEncodeCategoricalData()
+#dummy.splitIntoTrainingAndTestSets(test_size=1/3, random_state=0)
 #dummy.featureScaling()
 dummy.fitToTrainingSet()
 dummy.predictingTestSetResults()
