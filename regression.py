@@ -2,7 +2,7 @@
 Name: Jessica Kam
 Date: 2017/07/25
 """
-import data_preprocessing
+from data_preprocessing import DataPreprocessing
 
 from sklearn.linear_model import LinearRegression
 class Regression(DataPreprocessing):
@@ -29,10 +29,10 @@ class SimpleLinearRegression(Regression):
     def predictTestSetResults(self):
         self.y_pred = self.regressor.predict(self.X_test)
             
-    def visualizeTrainingSetResults(self, color1='red', color2='blue', title='Salary vs Exp (training)', xlabel='Years of Exp', ylabel='Salary'):
+    def visualizeTrainingSetResults(self, color1, color2, title, xlabel, ylabel):
         super(SimpleLinearRegression, self).visualizeResults(X_to_plot=self.X_train, x_for_scatter=self.X_train, y_for_scatter=self.y_train, color1, color2, title, xlabel, ylabel)
         
-    def visualizeTestSetResults(self, color1='red', color2='blue', title='Salary vs Exp (test)', xlabel='Years of Exp', ylabel='Salary'):
+    def visualizeTestSetResults(self, color1, color2, title, xlabel, ylabel):
         super(SimpleLinearRegression, self).visualizeResults(X_to_plot=self.X_train, x_for_scatter=self.X_test, y_for_scatter=self.y_test, color1, color2, title, xlabel, ylabel)
         
 import statsmodels.formula.api as sm
@@ -122,14 +122,18 @@ class SupportVectorRegression(Regression):
         self.regressor = SVR(kernel)
         self.regressor.fit(self.X, self.y)
     
-    def makePrediction(self, value_to_predict=6.5):
+    def makePredictions(self, value_to_predict=6.5):
         self.y_pred = regressor.predict(value_to_predict)
         self.y_pred = self.sc_y.inverse_transform(self.y_pred)
     
     def visualizeResults(self, color1='red', color2='blue', title='Truth or Bluff (SVR)', xlabel='Position Level', ylabel='Salary'):
         super(SVR, self).visualizeResults(X_to_plot=self.X, x_for_scatter=self.X, y_for_scatter=self.y, color1, color2, title, xlabel, ylabel)
 
+class DecisionTreeRegression(Regression):
+    pass
 
+class RandomForestRegression(DecisionTreeRegression):
+    pass
         
 dummy = SupportVectorRegression()
 dummy.importDataset('Position_Salaries.csv', 1,2,2)
