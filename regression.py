@@ -22,7 +22,7 @@ class Regression(DataPreprocessing):
         plt.show()
     
     def generateTitle(self, title):
-        return title + ' (' + self.name + ')'
+        return title + ' ' + '(' + self.name + ')'
 
 class SimpleLinearRegression(Regression):
     def __init__(self):
