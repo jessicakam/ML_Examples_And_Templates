@@ -22,6 +22,11 @@ class DataPreprocessing():
         self.X = dataset.iloc[:, X_start_index:X_end_index].values
         self.y = dataset.iloc[:, y_index].values
     
+    def importDataset(self, csv_file, lst_columns, y_index):
+        dataset = pd.read_csv(csv_file)
+        self.X = dataset.iloc[:, lst_columns.values
+        self.y = dataset.iloc[:, y_index].values
+        
     def fillInMissingData(self, filler='NaN', strategy='mean', axis=0, index_start_fill=1, index_end_fill=3):
         imputer = Imputer(missing_values=filler, strategy=strategy, axis=axis, *args, **kwargs)
         imputer = imputer.fit(self.X[:, index_start_fill:index_end_fill])

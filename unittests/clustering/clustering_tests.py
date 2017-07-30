@@ -1,5 +1,4 @@
 """
-Name: Jessica Kam
 Date: 2017/07/29
 """
 import clustering as cluster
