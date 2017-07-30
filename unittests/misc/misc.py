@@ -73,13 +73,43 @@ class TestModelSelection(TestCase):
     
 #####can add more stuff to DataPreprocessing, just that everything that inherit from it not have to use it...
 #####can also try adding another class with stuff common between most ml classes
+##2 different imports in datapreprocess along with diff versions for other things?
+##add csv files for everything in misc
+##remove my name for all files, change date -> date started
+##look up general way to instantiate
+##have singleton or something where have bunch possible functions but choose correct one based on name -- DECORATORS???
+class TestSOM(TestCase):
+    def test_SOM(self):
+        som = misc.SOM()
+        som.importDataset('Credit_Card_Applications', 0, -1, -1)
+        som.scaleFeatures()
+        som.train()
+        som.visualizeResults()
+        som.findFrauds()
+        
+class TestBoltzmannMachines(TestCase):
+    def test_ReducedBoltmannMachines(self):
+        rbm = misc.ReducedBoltzmannMachines()
+        rbm.importDataset() #
+        rbm.prepareTrainingAndTestSets() #
+        rbm.convertData()
+        rbm.convertIntoTensors()
+        rbm.convertIntoBinary()
+        rbm.createNN()
+        rbm.train()
+        rbm.test()
+        
 
-
-class SOM(DataPreprocessing):
-    pass
-
-class BoltzmannMachines(DataPreprocessing):
-    pass
-
-class AutoEncoder(DataPreprocessing):
-    pass
+class AutoEncoder(TestCase):
+    def test_AutoEncoder(self):
+        ae = misc.AutoEncoder()
+        ae.importDataset() #
+        ae.prepareTrainingAndTestSets()
+        ae.convertData()
+        ae.convertIntoTensors()
+        ae.createNN()
+        ae.train()
+        ae.test()
+        
+    
+    
