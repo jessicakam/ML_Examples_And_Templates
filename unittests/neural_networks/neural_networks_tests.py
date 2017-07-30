@@ -16,14 +16,15 @@ class TestRegressionClasses(TestCase):
         ann.encodeCategoricalData(2) ##ok???
         ann.splitIntoTrainingAndTestSets(test_size=0.2, random_state=0)
         ann.scaleFeatures()
-        ann.initialize()
-        ann.addInputLayerAndFirstHidden(output_dim=6, init='uniform', activation='relu', input_dim=11)
-        ann.addHiddenLayer(output_dim=6, init='uniform', activation='relu')
-        ann.addOutputLayer(output_dim = 1, init = 'uniform', activation = 'sigmoid')
+        ann.build()
         ann.compileNN(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
         ann.fitToTrainingSet(batch_size = 10, nb_epoch = 100)
         ann.predictResults()
         ann.makeConfusionMatrix()
+        ann.makeNewPrediction(lst_feature_values=[0.0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000])
+        ann.evaluate()
+        ann.improve()
+        
         
         
     def test_CNN(self):
@@ -33,9 +34,23 @@ class TestRegressionClasses(TestCase):
         cnn.addConvolutionLayer() ###
         cnn.flatten()
         cnn.fullConnection() ##
-        cnn.compileNN()
+        cnn.build()
+        cnn.compile()
         cnn.fitToImages() ##
-        
+        cnn.makeNewPrediction()
         
     def test_RNN(self):
+        rnn = nn.RNN()
+        rnn.importTrainingSet()
+        rnn.scaleFeatures()
+        rnn.getInputsAndOutputs()
+        rnn.reshape()
+        rnn.build()
+        rnn.compileNN()
+        rnn.fitToTrainingSet()
+        rnn.makePredictions()
+        rnn.visualizeResults()
+        
+        
+        
         
