@@ -17,16 +17,15 @@ class TestAssociationRuleLearningClasses(TestCase):
         apriori = assoc_rule_learn.Apriori()
         self.assertEqual(apriori.X, None, 'apriori.X should be None.')
         self.assertEqual(apriori.y, None, 'apriori.y should be None.')
-        print("got past assertEquals") #
+
         apriori.preprocessData('Market_Basket_Optimisation.csv', header=None, num_lines=7500, range_max=20,)
         self.assertFalse(apriori.dataset.empty, 'apriori.dataset should not be empty.')
-        print("dataset: {0}".format(apriori.dataset)) #
+
         apriori.trainOnDataset(min_support=0.003, min_confidence=0.2, min_lift=3, min_length=2)
         self.assertTrue(apriori.rules, 'apriori should have a rules attribute')
-        print("rules: {0}".format(apriori.rules)) #
+
         results = apriori.visualizeResults()
         self.assertTrue(results, 'apriori should return results (a list of rules).')
-        print("results: {0}".format(apriori.results)) #
  
         
 if __name__ == '__main__':
