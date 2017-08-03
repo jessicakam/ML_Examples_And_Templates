@@ -112,8 +112,6 @@ class TestClassificationClasses(TestCase):
         decision_tree.fitToTrainingSet(criterion='entropy', random_state=0)
         decision_tree.predictTestResults()
         decision_tree.makeConfusionMatrix()
-        decision_tree.visualizeTrain('red', 'green', 'Age', 'Estimated Salary')
-        decision_tree.visualizeTest('red', 'green', 'Age', 'Estimated Salary')
         decision_tree.visualizeTrainingSetResults('red', 'green', 'Age', 'Estimated Salary')
         decision_tree.visualizeTestSetResults('red', 'green', 'Age', 'Estimated Salary')
     
@@ -124,8 +122,8 @@ class TestClassificationClasses(TestCase):
         
         rand_forest.importDataset2('Social_Network_Ads.csv', [2,3], 4)
         rand_forest.splitIntoTrainingAndTestSets(test_size=0.25, random_state=0)
-        rand_forest.scaleFeatures()
-        rand_forest.fitToTrainingSet(n_estimators=10, criterion=10, random_state=0)
+        rand_forest.scaleFeatures2()
+        rand_forest.fitToTrainingSet(n_estimators=10, criterion='entropy', random_state=0)
         rand_forest.predictTestResults()
         rand_forest.makeConfusionMatrix()
         rand_forest.visualizeTrainingSetResults('red', 'green', 'Age', 'Estimated Salary')

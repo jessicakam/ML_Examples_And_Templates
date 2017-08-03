@@ -95,8 +95,8 @@ class NaiveBayes(Classification):
         self.name = 'NaiveBayes'
         
     def fitToTrainingSet(self, **kwargs):
-        self.classifer = GaussianNB()
-        self.classifer.fit(self.X_train, self.y_train)
+        self.classifier = GaussianNB()
+        self.classifier.fit(self.X_train, self.y_train)
 
         
 from sklearn.tree import DecisionTreeClassifier
