@@ -1,13 +1,15 @@
-"""
-Name: Jessica Kam
-Date: 2017/07/25
-"""
-from data_preprocessing import DataPreprocessing
+# 2017/07/25
+
+from data_preprocessing import DataPreProcessing
+from data_postprocessing import DataPostProcessing
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 from sklearn.linear_model import LinearRegression
-class Regression(DataPreprocessing):
+class Regression(DataPreProcessing, DataPostProcessing):
     def __init__(self):
-        self.name= None
+        super(Regression, self).__init__()
     
     def visualizeResults(self, X_to_plot, x_for_scatter, y_for_scatter, color1, color2, title, xlabel, ylabel, **kwargs):
         if kwargs.get('high_resolution') and kwargs.get('granularity'):
@@ -24,11 +26,13 @@ class Regression(DataPreprocessing):
     def generateTitle(self, title):
         return title + ' ' + '(' + self.name + ')'
 
+        
 class SimpleLinearRegression(Regression):
     def __init__(self):
+        super(Regression, self).__init__()
         self.regressor = None
         self.y_pred = None
-        self.name = 'SimpleLinReg'
+        self.name = 'SimpleLinearRegression'
     
     def fitToTrainingSet(self):
         self.regressor = LinearRegression()
@@ -38,15 +42,16 @@ class SimpleLinearRegression(Regression):
         self.y_pred = self.regressor.predict(self.X_test)
             
     def visualizeTrainingSetResults(self, color1, color2, title, xlabel, ylabel):
-        super(SimpleLinearRegression, self).visualizeResults(X_to_plot=self.X_train, x_for_scatter=self.X_train, y_for_scatter=self.y_train, color1, color2, title, xlabel, ylabel)
+        super(SimpleLinearRegression, self).visualizeResults(self.X_train, self.X_train, self.y_train, color1, color2, title, xlabel, ylabel)
         
     def visualizeTestSetResults(self, color1, color2, title, xlabel, ylabel):
-        super(SimpleLinearRegression, self).visualizeResults(X_to_plot=self.X_train, x_for_scatter=self.X_test, y_for_scatter=self.y_test, color1, color2, title, xlabel, ylabel)
+        super(SimpleLinearRegression, self).visualizeResults(self.X_train, self.X_test, self.y_test, color1, color2, title, xlabel, ylabel)
+  
         
 import statsmodels.formula.api as sm
 class MultipleLinearRegression(SimpleLinearRegression):
     def __init__(self):
-        self.name = 'MultipleLinReg'
+        self.name = 'MultipleLinearRegression'
     
     def visualizeTrainingSetResults(self):
         pass
@@ -56,15 +61,17 @@ class MultipleLinearRegression(SimpleLinearRegression):
     
     def findOptimalModelWithBackwardElimination(self):
         pass
-        ##TODO - see multiple_linear_regression.py
+        ##maybe later
+   
         
 from sklearn.preprocessing import PolynomialFeatures
 class PolynomialRegression(Regression):
     def __init__(self):
+        super(PolynomialRegression, self).__init__()
         self.lin_reg = None
         self.lin_reg_2 = None
         self.poly_reg = None
-        self.name = 'PolyReg'
+        self.name = 'PolynomialRegression'
 
     def fitToTrainingSet(self):
         pass
@@ -109,39 +116,38 @@ class PolynomialRegression(Regression):
     def predictTestSetResults(self):
         pass
     
-    def makePredictionWithLinReg(self, new_value=6.5):
+    def makePredictionWithLinReg(self, new_value):
         return self.lin_reg.predict(new_value)
         
-    def makePredictionWithPolyReg(self, new_value=6.5):
+    def makePredictionWithPolyReg(self, new_value):
         return self.lin_reg_2.predict(self.poly_reg.fit_transform(new_value))
 
+        
 from sklearn.svm import SVR
 class SupportVectorRegression(Regression):
     def __init__(self):
+        super(SupportVectorRegression, self).__init__()
         self.sc_X = None
         self.sc_y = None
         self.name = 'SVR'
-    
-    def scaleFeatures(self):
-        self.sc_X = StandardScaler()
-        self.sc_y = StandardScaler()
-        self.X = self.sc_X.fit_transform(self.X)
-        self.y = self.sc_y.fit_transform(self.y)
     
     def fitToDataset(self, kernel='rbf'):
         self.regressor = SVR(kernel)
         self.regressor.fit(self.X, self.y)
     
-    def makePredictions(self, value_to_predict=6.5):
-        self.y_pred = regressor.predict(value_to_predict)
+    def makePrediction(self, value_to_predict):
+        self.y_pred = self.regressor.predict(value_to_predict)
         self.y_pred = self.sc_y.inverse_transform(self.y_pred)
     
     def visualizeResults(self, color1, color2, title, xlabel, ylabel, **kwargs):
-        super(SVR, self).visualizeResults(X_to_plot=self.X, x_for_scatter=self.X, y_for_scatter=self.y, color1, color2, title, xlabel, ylabel, **kwargs)
+        super(SupportVectorRegression, self).visualizeResults(self.X, self.X, self.y, color1, color2, title, xlabel, ylabel, **kwargs)
+
         
+from sklearn.tree import DecisionTreeRegressor      
 class DecisionTreeRegression(Regression):
     def __init__(self):
-        self.name = 'DecisionTreeReg'
+        super(DecisionTreeRegression, self).__init__()
+        self.name = 'DecisionTreeRegression'
     
     def fitToDataset(self, **kwargs):
         self.regressor = DecisionTreeRegressor(**kwargs)
@@ -151,12 +157,14 @@ class DecisionTreeRegression(Regression):
         return self.regressor.predict(value_to_predict)
         
     def visualizeResults(self, color1, color2, title, xlabel, ylabel, **kwargs):
-        super(DecisionTreeRegression, self).visualizeResults(X_to_plot=self.X, x_for_scatter=self.X, y_for_scatter=self.y, color1, color2, title, xlabel, ylabel, **kwargs)
+        super(DecisionTreeRegression, self).visualizeResults(self.X, self.X, self.y, color1, color2, title, xlabel, ylabel, **kwargs)
 
 
+from sklearn.ensemble import RandomForestRegressor
 class RandomForestRegression(DecisionTreeRegression):
     def __init__(self):
-        self.name = 'RandomForestReg'
+        super(RandomForestRegression, self).__init__()
+        self.name = 'RandomForestRegression'
         
     def fitToDataset(self, **kwargs):
         self.regressor = RandomForestRegressor(**kwargs)
