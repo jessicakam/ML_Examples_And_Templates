@@ -1,26 +1,24 @@
-"""
-Date: 2017/07/29
-"""
+# 2017/07/29
 
-from data_preprocessing import DataPreprocessing
+from data_preprocessing import DataPreProcessing
+from data_postprocessing import DataPostProcessing
 import random
 import math
+import pandas as pd
+import matplotlib.pyplot as plt
 
-class RandomSelection(DataPreprocessing):
+class RandomSelection(DataPreProcessing, DataPostProcessing):
     def importDataset(self, csv_file):
         self.dataset = pd.read_csv(csv_file)
    
-    def implement(self):
-        #refactor later with more input var
-        N = 10000
-        d = 10
+    def implement(self, N, d):
         self.ads_selected = []
-        total_reward = 0
+        self.total_reward = 0
         for n in range(0, N):
             ad = random.randrange(d)
             self.ads_selected.append(ad)
-            reward = dataset.values[n, ad]
-            total_reward = total_reward + reward
+            reward = self.dataset.values[n, ad]
+            self.total_reward = self.total_reward + reward
         
     def visualizeResults(self, title, xlabel, ylabel):
         plt.hist(self.ads_selected)
@@ -30,14 +28,11 @@ class RandomSelection(DataPreprocessing):
         plt.show()
     
 class UCB(RandomSelection):
-    def implement(self):
-        #refactor later
-        N = 10000
-        d = 10
+    def implement(self, N, d):
         self.ads_selected = []
         numbers_of_selections = [0] * d
         sums_of_rewards = [0] * d
-        total_reward = 0
+        self.total_reward = 0
         for n in range(0, N):
             ad = 0
             max_upper_bound = 0
@@ -53,19 +48,16 @@ class UCB(RandomSelection):
                     ad = i
             self.ads_selected.append(ad)
             numbers_of_selections[ad] = numbers_of_selections[ad] + 1
-            reward = dataset.values[n, ad]
+            reward = self.dataset.values[n, ad]
             sums_of_rewards[ad] = sums_of_rewards[ad] + reward
-            total_reward = total_reward + reward
+            self.total_reward = self.total_reward + reward
 
 class ThompsonSampling(RandomSelection):
-    def implement(self):
-        #refactor later
-        N = 10000
-        d = 10
+    def implement(self, N, d):
         self.ads_selected = []
         numbers_of_rewards_1 = [0] * d
         numbers_of_rewards_0 = [0] * d
-        total_reward = 0
+        self.total_reward = 0
         for n in range(0, N):
             ad = 0
             max_random = 0
@@ -75,10 +67,10 @@ class ThompsonSampling(RandomSelection):
                     max_random = random_beta
                     ad = i
             self.ads_selected.append(ad)
-            reward = dataset.values[n, ad]
+            reward = self.dataset.values[n, ad]
             if reward == 1:
                 numbers_of_rewards_1[ad] = numbers_of_rewards_1[ad] + 1
             else:
                 numbers_of_rewards_0[ad] = numbers_of_rewards_0[ad] + 1
-            total_reward = total_reward + reward
+            self.total_reward = self.total_reward + reward
 
