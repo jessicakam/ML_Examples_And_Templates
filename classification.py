@@ -56,7 +56,7 @@ class LogisticReg(Classification):
         self.classifier = LogisticRegression()
         self.classifier.fit(self.X_train, self.y_train)
     
-        
+
 from sklearn.neighbors import KNeighborsClassifier
 class KNN(Classification):
     def __init__(self):
