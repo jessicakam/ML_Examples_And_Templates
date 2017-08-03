@@ -14,14 +14,14 @@ class DataPreProcessing():
         self.y = None
     
     def importDataset1(self, csv_file, X_start_index=0, X_end_index=-1, y_index=-1):
-        dataset = pd.read_csv(csv_file)
-        self.X = dataset.iloc[:, X_start_index:X_end_index].values
-        self.y = dataset.iloc[:, y_index].values
+        self.dataset = pd.read_csv(csv_file)
+        self.X = self.dataset.iloc[:, X_start_index:X_end_index].values
+        self.y = self.dataset.iloc[:, y_index].values
     
     def importDataset2(self, csv_file, lst_columns, y_index):
-        dataset = pd.read_csv(csv_file)
-        self.X = dataset.iloc[:, lst_columns].values
-        self.y = dataset.iloc[:, y_index].values
+        self.dataset = pd.read_csv(csv_file)
+        self.X = self.dataset.iloc[:, lst_columns].values
+        self.y = self.dataset.iloc[:, y_index].values
         
     def importDataset3(self, csv_file, list_of_columns):
         dataset = pd.read_csv(csv_file)

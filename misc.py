@@ -1,22 +1,12 @@
-"""
-unit9
-dimensionality reduction
-PCA
-LDA
-kernel PCA
+# 2017/07/29
 
-unit10
-GridSearch
-KFoldCrossValidation
-Model Selection
-XG Boost
+from data_preprocessing import DataPreProcessing
+from data_postprocessing import DataPostProcessing
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-#Date: 2017/07/29
-"""
-
-from data_preprocessing import DataPreprocessing
-
-class DimensionalityReduction(DataPreprocessing):
+class DimensionalityReduction(DataPreProcessing, DataPostProcessing):
     def __init__(self):
         self.name = ''
         self.abbrev = ''

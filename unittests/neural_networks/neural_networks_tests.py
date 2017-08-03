@@ -1,16 +1,22 @@
-#Date: 2017/07/29
+# 2017/07/29
 
-import neural_networks as nn
+import unittest
 from unittest import TestCase
 import os,sys,inspect
+
+# To get correct directory for file being tested
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 repo_dir = os.path.dirname(parentdir)
-sys.path.insert(0,repo_dir) 
+sys.path.insert(0,repo_dir)
+import neural_networks as nn
+
 
 class TestRegressionClasses(TestCase):
     def test_ANN(self):
         ann = nn.ANN()
+        #instance = 'logistic_regression'
+        #self.assertEqual(logistic_regression.X, None, instance + '.X should be None.')
         ann.importDataset('Churn_Modelling.csv', 3, 13, 13)
         ann.encodeCategoricalData(1) ##ok?
         ann.encodeCategoricalData(2) ##ok???
@@ -52,5 +58,6 @@ class TestRegressionClasses(TestCase):
         rnn.visualizeResults()
         
         
-        
+if __name__ == '__main__':
+    unittest.main()        
         

@@ -3,10 +3,9 @@
 from sklearn.metrics import confusion_matrix
 
 class DataPostProcessing():
-    def __init__(self):
-        pass
-    
     def makeConfusionMatrix(self):
         self.cm = confusion_matrix(self.y_test, self.y_pred) 
 
-
+    def predictResults(self):
+        self.y_pred = self.classifier.predict(self.X_test)
+    

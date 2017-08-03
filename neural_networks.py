@@ -1,8 +1,12 @@
-#Date: 2017/07/29
+# 2017/07/29
 
-from data_preprocessing import DataPreprocessing
+from data_preprocessing import DataPreProcessing
+from data_postprocessing import DataPostProcessing
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
-class NN(DataPreprocessing):
+class NN(DataPreProcessing, DataPostProcessing):
     def __init__(self):
         pass
     

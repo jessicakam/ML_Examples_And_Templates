@@ -1,16 +1,21 @@
-#Date: 2017/07/29
+# 2017/07/29
 
-import misc
+import unittest
 from unittest import TestCase
 import os,sys,inspect
+
+# To get correct directory for file being tested
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 repo_dir = os.path.dirname(parentdir)
-sys.path.insert(0,repo_dir) 
+sys.path.insert(0,repo_dir)
+import misc
 
 class TestDimensionalityReduction(TestCase):
     def test_PCA(self):
         pca = misc.PCA()
+        #instance = 'logistic_regression'
+        #self.assertEqual(logistic_regression.X, None, instance + '.X should be None.')
         pca.importDataset('Wine.csv', 0, 13, 13)
         pca.splitInfoTrainingAndTestSets(test_size=0.2, random_state=0)
         pca.scaleFeatures()
@@ -112,4 +117,5 @@ class AutoEncoder(TestCase):
         ae.test()
         
     
-    
+if __name__ == '__main__':
+    unittest.main()
