@@ -14,108 +14,207 @@ import misc
 class TestDimensionalityReduction(TestCase):
     def test_PCA(self):
         pca = misc.PCA()
-        #instance = 'logistic_regression'
-        #self.assertEqual(logistic_regression.X, None, instance + '.X should be None.')
-        pca.importDataset('Wine.csv', 0, 13, 13)
+        instance = 'pca'
+        
+        pca.importDataset1('Wine.csv', 0, 13, 13)
+        
         pca.splitInfoTrainingAndTestSets(test_size=0.2, random_state=0)
-        pca.scaleFeatures()
-        pca.applyPCA()
-        pca.fitLogisticRegressionToTrainingSet()
+        
+        pca.scaleFeatures2()
+        
+        pca.applyPCA(n_components=2)
+        self.assertTrue(pca.explained_variance, instance + '.explained variance has not been set yet')
+        
+        pca.fitLogisticRegressionToTrainingSet(random_state=0)
+        self.assertTrue(pca.classifier, instance + '.classifier has not been created.')
+        
         pca.predictResults()
+        
         pca.makeConfusionMatrix()
+        
         pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), xlabel='PC1', ylabel='PC2')
         pca.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'))
 
     def test_LDA(self):
         lda = misc.LDA()
+        instance = 'lda'
+        
         lda.importDataset('Wine.csv', 0, 13, 13)
+        
         lda.splitInfoTrainingAndTestSets(test_size=0.2, random_state=0)
-        lda.scaleFeatures()
-        lda.applyLDA()
+        
+        lda.scaleFeatures2()
+        
+        lda.applyLDA(n_components=2)
+        self.assertTrue(lda.lda, instance + '.lda has not been created yet.')
+        
         lda.fitLogisticRegressionToTrainingSet()
+        
         lda.predictResults()
+        
         lda.makeConfusionMatrix()
+        
         lda.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), xlabel='LD1', ylabel='LD2')
         lda.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'))
 
     def test_KernelPCA(self):
         k_pca = misc.KernelPCA()
-        k_pca.importDataset('Social_Network_Ads.csv', lst_columns=[2, 3], 4)
+        instance = 'k_pca'
+        
+        k_pca.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
+        
         k_pca.splitInfoTrainingAndTestSets(test_size=0.25, random_state=0)
-        k_pca.scaleFeatures()
-        k_pca.applyKernelPCA() #
+        
+        k_pca.scaleFeatures2()
+        
+        k_pca.applyKernelPCA(n_components = 2, kernel = 'rbf')
+        self.assertTrue(k_pca.kpca, instance + '.kpca has not been created.')
+        
         k_pca.fitLogisticRegressionToTrainingSet()
+        
         k_pca.predictResults()
+        
         k_pca.makeConfusionMatrix()
+        
         k_pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green'), xlabel='Age', ylabel='Salary')
         k_pca.visualizeTestSetResults(tuple_colors = ('red', 'green'), xlabel='Age', ylabel='Salary')
 
 class TestModelSelection(TestCase):
     def test_ModelSelection(self):
         gs = misc.GridSearch()
-        gs.importDataset('Social_Network_Ads.csv', lst_columns=[2, 3], 4)
+        instance = 'gs'
+        
+        gs.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
+        
         gs.splitIntoTrainingAndTestSets(test_size-0.25, random_state=0)
-        gs.scaleFeatures() #
-        gs.fitToTrainingSet(kernel='rbf', random_state=0) #
-        gs.predictResults() #
-        gs.makeConfusionMatrix() #
-        gs.applyKFoldCrossValidation(estimator=self.classifier, X=self.X_train, y=self.y_train, cv=10) #
-        gs.applyGridSearchToFindBestModels() #
-        gs.visualizeTrainingSetResults() ##
-        gs.visualizeTestSetResults() ##
+        
+        gs.scaleFeatures2()
+        
+        gs.fitToTrainingSet(kernel='rbf', random_state=0)
+        self.assertTrue(gs.classifier, instance + '.classifier has not been created.')
+        
+        gs.predictResults()
+        
+        gs.makeConfusionMatrix()
+        
+        gs.applyKFoldCrossValidation(cv=10) #
+        self.assertTrue(gs.accuracies, instance + '.accuracies has not been set.')
+        self.assertTrue(gs.mean, instance + '.mean has not been set.')
+        self.assertTrue(gs.std, instance + '.std has not been set.')
+        
+        gs.applyGridSearchToFindBestModels()
+        #.best_accuracy
+        #.best_parameters
+        self.assertTrue(gs.best_accuracy, instance + '.best_accuracy has not been set.')
+        self.assertTrue(gs.best_parameters, instance + '.best_parameters has not been set.')
+        
+        gs.visualizeTrainingSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
+        gs.visualizeTestSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
 
     # Install xgboost following the instructions on this link: http://xgboost.readthedocs.io/en/latest/build.html#
     def test_XGBoost(self):
         xgb = misc.XGBoost()
-        xgb.importDataset('Churn_Modelling.csv', 3, 13, 13)
+        instance = xgb
+        
+        xgb.importDataset1('Churn_Modelling.csv', 3, 13, 13)
+        
         xgb.encodeCategoricalData(1) ##same thing as example?
+        
         xgb.encodeCategoricalData(2) ##
+        
         xgb.splitIntoTrainingAndTestSets(test_size=0.2, random_state=0)
+        
         xgb.fitToTrainingSet()
+        self.assertTrue(xbg.classifier, instance + '.classifier has not been created.')
+        
         xgb.predictResults()
+        
         xgb.makeConfusionMatrix()
+        
         xgb.applyKFoldCrossValidation(estimator=self.classifier, X=self.X_train, y=self.y_train, cv=10)
+        self.assertTrue(xgb.accuracies, instance + '.accuracies has not been set.')
+        self.assertTrue(xgb.mean, instance + '.mean has not been set.')
+        self.assertTrue(xgb.std, instance + '.std has not been set.')
     
-#####can add more stuff to DataPreprocessing, just that everything that inherit from it not have to use it...
-#####can also try adding another class with stuff common between most ml classes
-##2 different imports in datapreprocess along with diff versions for other things?
 ##add csv files for everything in misc
-##remove my name for all files, change date -> date started
 ##look up general way to instantiate
 ##have singleton or something where have bunch possible functions but choose correct one based on name -- DECORATORS???
 class TestSOM(TestCase):
     def test_SOM(self):
         som = misc.SOM()
-        som.importDataset('Credit_Card_Applications', 0, -1, -1)
-        som.scaleFeatures()
-        som.train()
-        som.visualizeResults()
-        som.findFrauds()
+        instance = 'som'
         
-class TestBoltzmannMachines(TestCase):
+        som.importDataset1('Credit_Card_Applications', 0, -1, -1)
+        
+        som.scaleFeatures()
+        self.assertTrue(som.sc, instance + '.sc has not been created.')
+        
+        som.train(x=10, y=10, input_len=15, sigma=1.0, learning_rate=0.5)
+        self.assertTrue(som.som, instance + '.som has not been created.')
+        
+        som.visualizeResults()
+        
+        som.findFrauds()
+        self.assertTrue(som.frauds, instance + '.frauds has not been found.')
+        
+class TestReducedBoltzmannMachines(TestCase):
     def test_ReducedBoltmannMachines(self):
         rbm = misc.ReducedBoltzmannMachines()
-        rbm.importDataset() #
-        rbm.prepareTrainingAndTestSets() #
-        rbm.convertData()
-        rbm.convertIntoTensors()
-        rbm.convertIntoBinary()
-        rbm.createNN()
-        rbm.train()
-        rbm.test()
+        instance = 'rbm'
         
+        rbm.importDataset4()
+        self.assertTrue(rbm.movies, instance + '.movies has not been set.')
+        self.assertTrue(rbm.users, instance + '.users has not been set.')
+        self.assertTrue(rbm.ratings), instance + '.ratings has not been set.')
+        
+        rbm.prepareTrainingAndTestSets()
+        self.assertTrue(rbm.training_set, instance + '.training_set has not been set.')
+        self.assertTrue(rbm.test_set, instance + '.test_set has not been set.')
+        self.assertTrue(rbm.nb_users, instance + '.nb_users has not been set.')
+        self.assertTrue(rbm.nb_movies, instance + '.nb_movies has not been set.')
+        
+        rbm.convertData()
+        self.assertTrue(rbm.new_data, instance + '.new_data has not been set.')
+        
+        #.training_set before
+        #.test_set before
+        rbm.convertIntoTensors()
+        #afterwards or some other way to tell that tensors
+        
+        rbm.convertIntoBinary()
+        #check that all either -1, 0, 1
+        
+        rbm.createNN(nv=len(rbm.training_set[0]), nh=100)
+        
+        rbm.train(mb_epoch=10)
+        #should get screen printouts
+        
+        rbm.test()
+        #should get screen printouts
 
 class AutoEncoder(TestCase):
     def test_AutoEncoder(self):
         ae = misc.AutoEncoder()
-        ae.importDataset() #
-        ae.prepareTrainingAndTestSets()
-        ae.convertData()
-        ae.convertIntoTensors()
-        ae.createNN()
-        ae.train()
-        ae.test()
+        instance = 'ae'
         
+        ae.importDataset4()
+        
+        ae.prepareTrainingAndTestSets()
+        
+        ae.convertData()
+        
+        ae.convertIntoTensors()
+        
+        ae.createNN()
+        self.assertTrue(ae.sae, instance + '.sae has not been set.')
+        self.assertTrue(ae.criterion, instance + '.criterion has not been set.')
+        self.assertTrue(ae.optimizer, instance + '.optimizer has not been set.')
+        
+        ae.train(nb_epoch=200)
+        #suppose to print stuff
+        
+        ae.test()
+        #suppose to print
     
 if __name__ == '__main__':
     unittest.main()
