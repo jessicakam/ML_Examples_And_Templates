@@ -97,14 +97,12 @@ class TestModelSelection(TestCase):
         
         gs.makeConfusionMatrix()
         
-        gs.applyKFoldCrossValidation(cv=10) #
+        gs.applyKFoldCrossValidation(cv=10)
         self.assertTrue(gs.accuracies, instance + '.accuracies has not been set.')
         self.assertTrue(gs.mean, instance + '.mean has not been set.')
         self.assertTrue(gs.std, instance + '.std has not been set.')
         
         gs.applyGridSearchToFindBestModels()
-        #.best_accuracy
-        #.best_parameters
         self.assertTrue(gs.best_accuracy, instance + '.best_accuracy has not been set.')
         self.assertTrue(gs.best_parameters, instance + '.best_parameters has not been set.')
         
@@ -136,9 +134,7 @@ class TestModelSelection(TestCase):
         self.assertTrue(xgb.mean, instance + '.mean has not been set.')
         self.assertTrue(xgb.std, instance + '.std has not been set.')
     
-##add csv files for everything in misc
-##look up general way to instantiate
-##have singleton or something where have bunch possible functions but choose correct one based on name -- DECORATORS???
+
 class TestSOM(TestCase):
     def test_SOM(self):
         som = misc.SOM()
@@ -176,21 +172,23 @@ class TestReducedBoltzmannMachines(TestCase):
         rbm.convertData()
         self.assertTrue(rbm.new_data, instance + '.new_data has not been set.')
         
-        #.training_set before
-        #.test_set before
+        training_set_before = rbm.training_set
+        test_set_before = rbm.test_set
         rbm.convertIntoTensors()
-        #afterwards or some other way to tell that tensors
+        self.assertTrue(training_set_before != rbm.training_set, instance + '.training_set not a tensor.')
+        self.assertTrue(test_set_before != rbm.test_set, instance + '.test_set not a tensor.')
         
         rbm.convertIntoBinary()
-        #check that all either -1, 0, 1
+        self.assertTrue(rbm.training_set.all(a==0 or a==1 or a==-1), instance + '.training_set should be binary')
+        self.assertTrue(rbm.test_set.all(a==0 or a==1 or a==-1), instance + '.test_set should be binary')
         
         rbm.createNN(nv=len(rbm.training_set[0]), nh=100)
         
         rbm.train(mb_epoch=10)
-        #should get screen printouts
+        # screen printouts
         
         rbm.test()
-        #should get screen printouts
+        # screen printouts
 
 class AutoEncoder(TestCase):
     def test_AutoEncoder(self):
@@ -211,10 +209,10 @@ class AutoEncoder(TestCase):
         self.assertTrue(ae.optimizer, instance + '.optimizer has not been set.')
         
         ae.train(nb_epoch=200)
-        #suppose to print stuff
+        # screen printouts
         
         ae.test()
-        #suppose to print
+        # screen printouts
     
 if __name__ == '__main__':
     unittest.main()
