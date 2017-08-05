@@ -116,9 +116,8 @@ class TestModelSelection(TestCase):
         
         xgb.importDataset1('Churn_Modelling.csv', 3, 13, 13)
         
-        xgb.encodeCategoricalData(1) ##same thing as example?
-        
-        xgb.encodeCategoricalData(2) ##
+        xgb.encodeCategoricalData()
+        self.assertTrue(xbg.onehotencoder, instance + '.onehotencoder has not been created.')
         
         xgb.splitIntoTrainingAndTestSets(test_size=0.2, random_state=0)
         
