@@ -54,6 +54,15 @@ class DataPreProcessing():
     def encodeCategoricalDataForDependentVar(self):
         labelencoder_y = LabelEncoder()
         self.y = labelencoder_y.fit_transform(self.y)
+        
+    def encodeCategoricalData(self):
+        labelencoder_X_1 = LabelEncoder()
+        self.X[:, 1] = labelencoder_X_1.fit_transform(self.X[:, 1])
+        labelencoder_X_2 = LabelEncoder()
+        self.X[:, 2] = labelencoder_X_2.fit_transform(self.X[:, 2])
+        self.onehotencoder = OneHotEncoder(categorical_features = [1])
+        self.X = self.onehotencoder.fit_transform(self.X).toarray()
+        self.X = self.X[:, 1:]
     
     def avoidTheDummyVariableTrap(self, start_index=1):
         self.X = self.X[:, start_index:]

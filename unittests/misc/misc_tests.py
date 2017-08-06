@@ -160,7 +160,7 @@ class TestReducedBoltzmannMachines(TestCase):
         rbm.importDataset4()
         self.assertTrue(rbm.movies, instance + '.movies has not been set.')
         self.assertTrue(rbm.users, instance + '.users has not been set.')
-        self.assertTrue(rbm.ratings), instance + '.ratings has not been set.')
+        self.assertTrue(rbm.ratings, instance + '.ratings has not been set.')
         
         rbm.prepareTrainingAndTestSets()
         self.assertTrue(rbm.training_set, instance + '.training_set has not been set.')
