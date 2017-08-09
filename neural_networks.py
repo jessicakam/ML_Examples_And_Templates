@@ -11,7 +11,7 @@ class NN(DataPreProcessing, DataPostProcessing):
         super(NN, self).__init__()
     
     def compileNN(self, **kwargs):
-        self.classifier.compile(**kwargs)
+        pass
 
 
 import keras
@@ -35,6 +35,9 @@ class ANN(NN):
         self.classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
         return self.classifier
     
+    def compileNN(self, **kwargs):
+        self.classifier.compile(**kwargs)
+        
     def fitToTrainingSet(self, **kwargs):
         self.classifier.fit(self.X_train, self.y_train, **kwargs)
         
@@ -69,7 +72,7 @@ class ANN(NN):
 
 
 from keras.models import Sequential
-from keras.layers import Convolution2D
+from keras.layers import Conv2D #Convolution2D
 from keras.layers import MaxPooling2D
 from keras.layers import Flatten
 from keras.layers import Dense
@@ -85,24 +88,24 @@ class CNN(ANN):
     def build(self):
         # override when inherit
         # Initialising the CNN
-        classifier = Sequential()
+        self.classifier = Sequential()
         
         # Step 1 - Convolution
-        classifier.add(Convolution2D(32, (3, 3), input_shape = (64, 64, 3), activation = 'relu')) #Conv2D
+        self.classifier.add(Conv2D(32, (3, 3), input_shape = (64, 64, 3), activation = 'relu')) #Conv2D
         
         # Step 2 - Pooling
-        classifier.add(MaxPooling2D(pool_size = (2, 2)))
+        self.classifier.add(MaxPooling2D(pool_size = (2, 2)))
         
         # Adding a second convolutional layer
-        classifier.add(Convolution2D(32, (3, 3), activation = 'relu')) #Conv2D
-        classifier.add(MaxPooling2D(pool_size = (2, 2)))
+        self.classifier.add(Conv2D(32, (3, 3), activation = 'relu')) #Conv2D
+        self.classifier.add(MaxPooling2D(pool_size = (2, 2)))
         
         # Step 3 - Flattening
-        classifier.add(Flatten())
+        self.classifier.add(Flatten())
         
         # Step 4 - Full connection
-        classifier.add(Dense(units = 128, activation = 'relu'))
-        classifier.add(Dense(units = 1, activation = 'sigmoid'))
+        self.classifier.add(Dense(units = 128, activation = 'relu'))
+        self.classifier.add(Dense(units = 1, activation = 'sigmoid'))
         
     def fitToImages(self):
         # overrride when inherit
@@ -182,11 +185,11 @@ class RNN(NN):
         # Adding the output layer
         self.regressor.add(Dense(units = 1))
     
-    def compileNN(self):
-        self.regressor.compile(optimizer = 'adam', loss = 'mean_squared_error')
+    def compileNN(self, **kwargs):
+        self.regressor.compile(**kwargs)
         
-    def fitToTrainingSet(self):
-        self.regressor.fit(self.X_train, self.y_train, batch_size = 32, epochs = 200)
+    def fitToTrainingSet(self, **kwargs):
+        self.regressor.fit(self.X_train, self.y_train, **kwargs)
         
     def makePredictions(self):
         # Getting the real stock price of 2017

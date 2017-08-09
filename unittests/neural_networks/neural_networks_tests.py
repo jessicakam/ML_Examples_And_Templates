@@ -17,7 +17,7 @@ class TestNeuralNetworks(TestCase):
         ann = nn.ANN()
         instance = 'ann'
         
-        ann.importDataset('Churn_Modelling.csv', 3, 13, 13)
+        ann.importDataset1('Churn_Modelling.csv', 3, 13, 13)
         
         ann.encodeCategoricalData()
         
@@ -33,12 +33,12 @@ class TestNeuralNetworks(TestCase):
         ann.fitToTrainingSet(batch_size = 10, nb_epoch = 100)
         
         ann.predictResults()
-        self.assertTrue(ann.y_pred, instance + '.y_pred should be set.')
+        self.assertTrue(ann.y_pred.any(), instance + '.y_pred should be set.')
         
         ann.makeConfusionMatrix()
         
         ann.makeNewPrediction(lst_feature_values=[0.0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000])
-        self.assertTrue(ann.new_prediction, instance + '.new_prediction should be set.')
+        self.assertBoolean(ann.new_prediction, instance + '.new_prediction should be set.')
         
         ann.evaluate()
         self.assertTrue(ann.mean, instance + '.mean should be set.')
@@ -55,7 +55,7 @@ class TestNeuralNetworks(TestCase):
         
         cnn.build()
         
-        cnn.compile()
+        cnn.compileNN(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
         
         cnn.fitToImages()
         
@@ -77,20 +77,24 @@ class TestNeuralNetworks(TestCase):
         X_before = rnn.X_train
         rnn.reshape()
         X_after = rnn.X_train
-        ##self.assertTrue((X_before.shape[0] != X_after[0]) and (X_before.shape[1] != X_before.shape[1]), instance + '.X_train should change after reshaping')
+        self.assertTrue((X_before.shape[0] != X_after[0]) or (X_before.shape[1] != X_before.shape[1]), instance + '.X_train should change after reshaping')
         
         rnn.build()
         self.assertTrue(rnn.regressor, instance + '.regressor should be set.')
         
-        rnn.compileNN()
+        rnn.compileNN(optimizer='adam', loss='mean_squared_error')
         
-        rnn.fitToTrainingSet()
-        self.assertTrue(rnn.real_stock_price, instance + '.real_stock_price should be set.')
-        self.assertTrue(rnn.predicted_stock_price, instance + '.predicted_stock_price should be set.')
+        rnn.fitToTrainingSet(batch_size = 32, epochs = 200)
         
         rnn.makePredictions()
+        self.assertTrue(rnn.real_stock_price.any(), instance + '.real_stock_price should be set.')
+        self.assertTrue(rnn.predicted_stock_price.any(), instance + '.predicted_stock_price should be set.')
+        
         rnn.visualizeResults()
         self.assertTrue(rnn.best_accuracy, instance + '.rmse should be set.')
+        
+        rnn.evaluate()
+        self.assertTrue(rnn.rmse, instance + '.rsme should be set')
         
         
 if __name__ == '__main__':
