@@ -13,6 +13,7 @@ import neural_networks as nn
 
 
 class TestNeuralNetworks(TestCase):
+    
     def test_ANN(self):
         ann = nn.ANN()
         instance = 'ann'
@@ -38,17 +39,17 @@ class TestNeuralNetworks(TestCase):
         ann.makeConfusionMatrix()
         
         ann.makeNewPrediction(lst_feature_values=[0.0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000])
-        self.assertBoolean(ann.new_prediction, instance + '.new_prediction should be set.')
+        self.assertTrue(ann.new_prediction.dtype == bool, instance + '.new_prediction should be set.')
         
         ann.evaluate()
         self.assertTrue(ann.mean, instance + '.mean should be set.')
         self.assertTrue(ann.variance, instance + '.variance should be set.')
         
-        ann.improve()
-        self.assertTrue(ann.best_parameters, instance + '.best_parameters should be set.')
-        self.assertTrue(ann.best_accuracy, instance + '.best_accuracy should be set.')
+        #ann.improve()
+        #self.assertTrue(ann.best_parameters, instance + '.best_parameters should be set.')
+        #self.assertTrue(ann.best_accuracy, instance + '.best_accuracy should be set.')
            
-        
+
     def test_CNN(self):
         cnn = nn.CNN()
         instance = 'cnn'
@@ -60,7 +61,6 @@ class TestNeuralNetworks(TestCase):
         cnn.fitToImages()
         
         cnn.makeNewPrediction()
-        
         
     def test_RNN(self):
         rnn = nn.RNN()
@@ -91,11 +91,10 @@ class TestNeuralNetworks(TestCase):
         self.assertTrue(rnn.predicted_stock_price.any(), instance + '.predicted_stock_price should be set.')
         
         rnn.visualizeResults()
-        self.assertTrue(rnn.best_accuracy, instance + '.rmse should be set.')
         
         rnn.evaluate()
         self.assertTrue(rnn.rmse, instance + '.rsme should be set')
-        
+
         
 if __name__ == '__main__':
     unittest.main()        
