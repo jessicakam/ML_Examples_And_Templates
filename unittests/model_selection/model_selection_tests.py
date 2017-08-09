@@ -13,7 +13,7 @@ import model_selection as ms
 
 class TestModelSelection(TestCase):
     def test_ModelSelection(self):
-        gs = ms.GridSearch()
+gs = ms.GridSearch()
         instance = 'gs'
         
         gs.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
@@ -35,6 +35,7 @@ class TestModelSelection(TestCase):
         self.assertTrue(gs.std, instance + '.std has not been set.')
         
         gs.applyGridSearchToFindBestModels()
+        self.assertTrue(gs.grid_search, instance + '.grid_search has not been set.')
         self.assertTrue(gs.best_accuracy, instance + '.best_accuracy has not been set.')
         self.assertTrue(gs.best_parameters, instance + '.best_parameters has not been set.')
         

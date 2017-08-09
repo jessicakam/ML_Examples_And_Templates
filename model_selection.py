@@ -59,33 +59,6 @@ from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from matplotlib.colors import ListedColormap
 class ModelSelection(DataPreProcessing, DataPostProcessing):
-        gs = ms.GridSearch()
-        instance = 'gs'
-        
-        gs.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
-        
-        gs.splitIntoTrainingAndTestSets(test_size=0.25, random_state=0)
-        
-        gs.scaleFeatures2()
-        
-        gs.fitToTrainingSet(kernel='rbf', random_state=0)
-        self.assertTrue(gs.classifier, instance + '.classifier has not been created.')
-        
-        gs.predictResults()
-        
-        gs.makeConfusionMatrix()
-        
-        gs.applyKFoldCrossValidation(cv=10)
-        self.assertTrue(gs.accuracies, instance + '.accuracies has not been set.')
-        self.assertTrue(gs.mean, instance + '.mean has not been set.')
-        self.assertTrue(gs.std, instance + '.std has not been set.')
-        
-        gs.applyGridSearchToFindBestModels()
-        self.assertTrue(gs.best_accuracy, instance + '.best_accuracy has not been set.')
-        self.assertTrue(gs.best_parameters, instance + '.best_parameters has not been set.')
-        
-        gs.visualizeTrainingSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
-        gs.visualizeTestSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
     
     def __init__():
         super(ModelSelection, self).__init__()
