@@ -116,12 +116,12 @@ class CNN(ANN):
         
         test_datagen = ImageDataGenerator(rescale = 1./255)
         
-        training_set = train_datagen.flow_from_directory('dataset/training_set',
+        self.training_set = train_datagen.flow_from_directory('dataset/training_set',
                                                          target_size = (64, 64),
                                                          batch_size = 32,
                                                          class_mode = 'binary')
         
-        test_set = test_datagen.flow_from_directory('dataset/test_set',
+        self.test_set = test_datagen.flow_from_directory('dataset/test_set',
                                                     target_size = (64, 64),
                                                     batch_size = 32,
                                                     class_mode = 'binary')
@@ -138,6 +138,7 @@ class CNN(ANN):
         test_image = image.img_to_array(test_image)
         test_image = np.expand_dims(test_image, axis = 0)
         result = self.classifier.predict(test_image)
+        ###issue
         self.training_set.class_indices
         if result[0][0] == 1:
             self.prediction = 'dog'
