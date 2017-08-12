@@ -9,42 +9,42 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 repo_dir = os.path.dirname(parentdir)
 sys.path.insert(0,repo_dir)
-import model_selection as ms
+import model_selection
 
 class TestModelSelection(TestCase):
     def test_ModelSelection(self):
-gs = ms.GridSearch()
-        instance = 'gs'
+        ms = model_selection.ModelSelection()
+        instance = 'ms'
         
-        gs.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
+        ms.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
         
-        gs.splitIntoTrainingAndTestSets(test_size=0.25, random_state=0)
+        ms.splitIntoTrainingAndTestSets(test_size=0.25, random_state=0)
         
-        gs.scaleFeatures2()
+        ms.scaleFeatures2()
         
-        gs.fitToTrainingSet(kernel='rbf', random_state=0)
-        self.assertTrue(gs.classifier, instance + '.classifier has not been created.')
+        ms.fitToTrainingSet(kernel='rbf', random_state=0)
+        self.assertTrue(ms.classifier, instance + '.classifier has not been created.')
         
-        gs.predictResults()
+        ms.predictResults()
         
-        gs.makeConfusionMatrix()
+        ms.makeConfusionMatrix()
         
-        gs.applyKFoldCrossValidation(cv=10)
-        self.assertTrue(gs.accuracies, instance + '.accuracies has not been set.')
-        self.assertTrue(gs.mean, instance + '.mean has not been set.')
-        self.assertTrue(gs.std, instance + '.std has not been set.')
+        ms.applyKFoldCrossValidation(estimator = ms.classifier, X = ms.X_train, y = ms.y_train, cv=10)
+        self.assertTrue(ms.accuracies.any(), instance + '.accuracies has not been set.')
+        self.assertTrue(ms.mean.any(), instance + '.mean has not been set.')
+        self.assertTrue(ms.std.any(), instance + '.std has not been set.')
         
-        gs.applyGridSearchToFindBestModels()
-        self.assertTrue(gs.grid_search, instance + '.grid_search has not been set.')
-        self.assertTrue(gs.best_accuracy, instance + '.best_accuracy has not been set.')
-        self.assertTrue(gs.best_parameters, instance + '.best_parameters has not been set.')
+        ms.applyGridSearchToFindBestModels()
+        self.assertTrue(ms.grid_search, instance + '.grid_search has not been set.')
+        self.assertTrue(ms.best_accuracy, instance + '.best_accuracy has not been set.')
+        self.assertTrue(ms.best_parameters, instance + '.best_parameters has not been set.')
         
-        gs.visualizeTrainingSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
-        gs.visualizeTestSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
+        ms.visualizeTrainingSetResults('Kernel SVM (Training set)', 'Age', 'Estimated Salary')
+        ms.visualizeTestSetResults('Kernel SVM (Test set)', 'Age', 'Estimated Salary')
 
     # Install xgboost following the instructions on this link: http://xgboost.readthedocs.io/en/latest/build.html#
     def test_XGBoost(self):
-        xgb = ms.XGBoost()
+        xgb = model_selection.XGBoost()
         instance = 'xgb'
         
         xgb.importDataset1('Churn_Modelling.csv', 3, 13, 13)
@@ -61,11 +61,7 @@ gs = ms.GridSearch()
         
         xgb.makeConfusionMatrix()
         
-        xgb.applyKFoldCrossValidation(estimator=self.classifier, X=self.X_train, y=self.y_train, cv=10)
-        self.assertTrue(xgb.accuracies, instance + '.accuracies has not been set.')
-        self.assertTrue(xgb.mean, instance + '.mean has not been set.')
-        self.assertTrue(xgb.std, instance + '.std has not been set.')
-    
+        xgb.applyKFoldCrossValidation(estimator=xgb.classifier, X=xgb.X_train, y=xgb.y_train, cv=10)    
 
 if __name__ == '__main__':
     unittest.main()
