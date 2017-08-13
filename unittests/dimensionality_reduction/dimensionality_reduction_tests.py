@@ -13,7 +13,7 @@ import dimensionality_reduction as dr
 
 class TestDimensionalityReduction(TestCase):
     def test_PCA(self):
-        pca = dr.PCA()
+        pca = dr.PCA_()
         instance = 'pca'
         
         pca.importDataset1('Wine.csv', 0, 13, 13)
@@ -32,11 +32,12 @@ class TestDimensionalityReduction(TestCase):
         
         pca.makeConfusionMatrix()
         
-        pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), xlabel='PC1', ylabel='PC2')
-        pca.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'))
+        pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), title='PCA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
+        pca.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'), title='PCA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
+    
 
     def test_LDA(self):
-        lda = dr.LDA()
+        lda = dr.LDA_()
         instance = 'lda'
         
         lda.importDataset('Wine.csv', 0, 13, 13)
@@ -54,11 +55,12 @@ class TestDimensionalityReduction(TestCase):
         
         lda.makeConfusionMatrix()
         
-        lda.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), xlabel='LD1', ylabel='LD2')
-        lda.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'))
+        lda.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), title='LDA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
+        lda.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'), title='LDA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
+    
 
     def test_KernelPCA(self):
-        k_pca = dr.KernelPCA()
+        k_pca = dr.KernelPCA_()
         instance = 'k_pca'
         
         k_pca.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
@@ -76,8 +78,8 @@ class TestDimensionalityReduction(TestCase):
         
         k_pca.makeConfusionMatrix()
         
-        k_pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green'), xlabel='Age', ylabel='Salary')
-        k_pca.visualizeTestSetResults(tuple_colors = ('red', 'green'), xlabel='Age', ylabel='Salary')
+        k_pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green'), title='KernelPCA Logistic Regression (Training Set)', xlabel='Age', ylabel='Salary')
+        k_pca.visualizeTestSetResults(tuple_colors = ('red', 'green'), title='KernelPCA Logisitic Regression (Test Set)', xlabel='Age', ylabel='Salary')
 
 
 if __name__ == '__main__':
