@@ -47,8 +47,7 @@ class SimpleLinearRegression(Regression):
     def visualizeTestSetResults(self, color1, color2, title, xlabel, ylabel):
         super(SimpleLinearRegression, self).visualizeResults(self.X_train, self.X_test, self.y_test, color1, color2, title, xlabel, ylabel)
   
-        
-import statsmodels.formula.api as sm
+
 class MultipleLinearRegression(SimpleLinearRegression):
     def __init__(self):
         self.name = 'MultipleLinearRegression'
@@ -89,11 +88,11 @@ class PolynomialRegression(Regression):
     
     def visualizeResults(self, X_to_plot, x_for_scatter, y_for_scatter, color1, color2, title, xlabel, ylabel):
         pass
-    
+
     #having a bit of trouble with unsupported input type
     def visualizeLinRegResults(self, color1, color2, title, xlabel, ylabel):
-        plt.scatter(self.X, self.y, color1)
-        plt.plot(self.X, self.lin_reg.predict(self.X), color2)
+        plt.scatter(self.X, self.y, color = color1)
+        plt.plot(self.X, self.lin_reg.predict(self.X), color = color2)
         plt.title(self.generateTitle(title))
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
@@ -101,13 +100,13 @@ class PolynomialRegression(Regression):
         
     #having a bit of trouble with unsupported input type, maybe bc of version?
     def visualizePolyRegResults(self, color1, color2, title, xlabel, ylabel, **kwargs):
-        plt.scatter(self.X, self.y, color1)
+        plt.scatter(self.X, self.y, color=color1)
         X_to_plot = self.X
         if kwargs.get('high_resolution') and kwargs.get('granularity'):
             X_grid = np.arange(min(self.X), max(self.X), kwargs.get('granularity'))
             X_grid = X_grid.reshape((len(X_grid), 1))
             X_to_plot = X_grid
-        plt.plot(X_to_plot, self.lin_reg_2.predict(self.poly_reg.fit_transform(X_to_plot)), color2)
+        plt.plot(X_to_plot, self.lin_reg_2.predict(self.poly_reg.fit_transform(X_to_plot)), color=color2)
         plt.title(self.generateTitle(title))
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)

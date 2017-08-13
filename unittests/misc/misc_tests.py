@@ -48,8 +48,8 @@ class TestReducedBoltzmannMachines(TestCase):
         self.assertTrue(rbm.nb_movies, instance + '.nb_movies has not been set.')
         
         #TypeError: 'module' object is not subscriptable
-        #rbm.convertData()
-        #self.assertFalse(rbm.new_data.empty, instance + '.new_data has not been set.')
+        rbm.convertData()
+        self.assertFalse(rbm.new_data.empty, instance + '.new_data has not been set.')
         
         training_set_before = rbm.training_set
         test_set_before = rbm.test_set
@@ -58,8 +58,14 @@ class TestReducedBoltzmannMachines(TestCase):
         self.assertTrue(test_set_before != rbm.test_set, instance + '.test_set not a tensor.')
         
         rbm.convertIntoBinary()
-        self.assertTrue(rbm.training_set.all(a==0 or a==1 or a==-1), instance + '.training_set should be binary')
-        self.assertTrue(rbm.test_set.all(a==0 or a==1 or a==-1), instance + '.test_set should be binary')
+        self.assertTrue((rbm.training_set==0 |
+                        rbm.training_set==1 |
+                        rbm.training_set==-1).all(), instance + '.training_set should be binary')
+        self.assertTrue((rbm.training_set==0 |
+                        rbm.training_set==1 |
+                        rbm.training_set==-1).all(), instance + '.training_set should be binary')
+        #self.assertTrue(rbm.training_set.all(rbm.a==0 or rbm.a==1 or rbm.a==-1), instance + '.training_set should be binary')
+        #self.assertTrue(rbm.test_set.all(a==0 or a==1 or a==-1), instance + '.test_set should be binary')
         
         rbm.createNN(nv=len(rbm.training_set[0]), nh=100)
         
@@ -78,7 +84,6 @@ class TestAutoEncoder(TestCase):
         
         ae.prepareTrainingAndTestSets()
         
-        #same error as above
         ae.convertData()
         
         ae.convertIntoTensors()

@@ -69,6 +69,8 @@ class ReducedBoltzmannMachines(DataPreProcessing, DataPostProcessing):
             self.a += torch.sum((ph0 - phk), 0)
             
     def convertIntoBinary(self):
+        # override
+        #1==Liked, 0==Not Liked
         self.training_set[self.training_set == 0] = -1
         self.training_set[self.training_set == 1] = 0
         self.training_set[self.training_set == 2] = 0
@@ -86,25 +88,7 @@ class ReducedBoltzmannMachines(DataPreProcessing, DataPostProcessing):
         self.W = torch.randn(self.nh, self.nv)
         self.a = torch.randn(1, self.nh)
         self.b = torch.randn(1, self.nv)
-    """
-    def sample_h(self, x):
-        wx = torch.mm(x, self.W.t())
-        activation = wx + self.a.expand_as(wx)
-        p_h_given_v = torch.sigmoid(activation)
-        return p_h_given_v, torch.bernoulli(p_h_given_v)
-        
-    def sample_v(self, y):
-        wy = torch.mm(y, self.W)
-        activation = wy + self.b.expand_as(wy)
-        p_v_given_h = torch.sigmoid(activation)
-        return p_v_given_h, torch.bernoulli(p_v_given_h)
-        
-    def trainRBM(self, v0, vk, ph0, phk):
-        # Helper for training the RBM
-        self.W += torch.mm(v0.t(), ph0) - torch.mm(vk.t(), phk)
-        self.b += torch.sum((v0 - vk), 0)
-        self.a += torch.sum((ph0 - phk), 0)
-        """
+
     def train(self, nb_epoch):
         # Training the RBM
         for epoch in range(1, nb_epoch + 1):

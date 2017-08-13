@@ -99,6 +99,7 @@ class DataPreProcessing():
         self.nb_movies = int(max(max(self.training_set[:,1]), max(self.test_set[:,1])))
     
     def convertData(self):
+        #override
         # Converting the data into an array with users in lines and movies in columns
         self.new_data = []
         for id_users in range(1, self.nb_users + 1):
@@ -107,8 +108,8 @@ class DataPreProcessing():
             ratings = np.zeros(self.nb_movies)
             ratings[id_movies - 1] = id_ratings
             self.new_data.append(list(ratings))
-        self.training_set = convert(self.training_set)
-        self.test_set = convert(self.test_set)
+        self.training_set = torch.convert(self.training_set)
+        self.test_set = torch.convert(self.test_set)
     
     def convertIntoTensors(self):
         # Converting the data into Torch tensors

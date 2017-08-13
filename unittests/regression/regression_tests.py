@@ -71,9 +71,9 @@ class TestRegressionClasses(TestCase):
         poly_reg.fitPolyRegToDataset(degree=4)
         self.assertTrue(poly_reg.lin_reg_2, instance + '.lin_reg_2 should have been created.')
         
-        #poly_reg.visualizeLinRegResults('red', 'blue', 'Truth or Bluff (Lin Reg)', 'Position Level', 'Salary')
-        #poly_reg.visualizePolyRegResults('red', 'blue', 'Truth or Bluff (Poly Reg)', 'Position Level', 'Salary')
-        #poly_reg.visualizePolyRegResults(high_resolution=True, granularity=0.1, color1='red', color2='blue', title='Truth or Bluff (Poly Reg)', xlabel='Position Level', ylabel='Salary')
+        poly_reg.visualizeLinRegResults('red', 'blue', 'Truth or Bluff (Lin Reg)', 'Position Level', 'Salary')
+        poly_reg.visualizePolyRegResults('red', 'blue', 'Truth or Bluff (Poly Reg)', 'Position Level', 'Salary')
+        poly_reg.visualizePolyRegResults(high_resolution=True, granularity=0.1, color1='red', color2='blue', title='Truth or Bluff (Poly Reg)', xlabel='Position Level', ylabel='Salary')
         
         self.assertTrue(poly_reg.makePredictionWithLinReg(6.5))
         self.assertTrue(poly_reg.makePredictionWithPolyReg(6.5))
