@@ -25,7 +25,7 @@ class DimensionalityReduction(DataPreProcessing, DataPostProcessing):
         plt.ylim(X2.min(), X2.max())
         for i, j in enumerate(np.unique(y_set)):
             plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
-                        c = ListedColormap(tuple_colors(i), label = j))
+                        c = ListedColormap(tuple_colors)(i), label = j)
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
@@ -35,7 +35,7 @@ class DimensionalityReduction(DataPreProcessing, DataPostProcessing):
     def visualizeTrainingSetResults(self, tuple_colors, title, xlabel, ylabel):
         self.visualizeResults(self.X_train, self.y_train, tuple_colors, title, xlabel, ylabel)
         
-    def visualizeTestSet(self, tuple_colors, title, xlabel, ylabel):
+    def visualizeTestSetResults(self, tuple_colors, title, xlabel, ylabel):
         self.visualizeResults(self.X_test, self.y_test, tuple_colors, title, xlabel, ylabel)
         
         
@@ -44,13 +44,13 @@ from matplotlib.colors import ListedColormap
 class PCA_(DimensionalityReduction):
         
     def __init__(self):
-        super(PCA, self).__init__()
+        super(PCA_, self).__init__()
 
     def applyPCA(self, **kwargs):
-        pca = PCA(**kwargs)
-        self.X_train = pca.fit_transform(self.X_train)
-        self.X_test = pca.transform(self.X_test)
-        self.explained_variance = pca.explained_variance_ratio_
+        self.pca = PCA(**kwargs)
+        self.X_train = self.pca.fit_transform(self.X_train)
+        self.X_test = self.pca.transform(self.X_test)
+        self.explained_variance = self.pca.explained_variance_ratio_
     
 
 from sklearn.decomposition import KernelPCA
@@ -65,7 +65,7 @@ class KernelPCA_(DimensionalityReduction):
         self.X_test = self.kpca.transform(self.X_test)
     
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
-class LDA_():
+class LDA_(DimensionalityReduction):
 
     def __init__(self):
         super(LDA_, self).__init__()

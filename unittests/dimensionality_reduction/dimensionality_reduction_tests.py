@@ -11,19 +11,19 @@ repo_dir = os.path.dirname(parentdir)
 sys.path.insert(0,repo_dir)
 import dimensionality_reduction as dr
 
-class TestDimensionalityReduction(TestCase):
+class TestDimensionalityReductionClasses(TestCase):
     def test_PCA(self):
         pca = dr.PCA_()
         instance = 'pca'
         
         pca.importDataset1('Wine.csv', 0, 13, 13)
         
-        pca.splitInfoTrainingAndTestSets(test_size=0.2, random_state=0)
+        pca.splitIntoTrainingAndTestSets(test_size=0.2, random_state=0)
         
         pca.scaleFeatures2()
         
         pca.applyPCA(n_components=2)
-        self.assertTrue(pca.explained_variance, instance + '.explained variance has not been set yet')
+        self.assertTrue(pca.explained_variance.any(), instance + '.explained variance has not been set yet')
         
         pca.fitLogisticRegressionToTrainingSet(random_state=0)
         self.assertTrue(pca.classifier, instance + '.classifier has not been created.')
@@ -33,16 +33,16 @@ class TestDimensionalityReduction(TestCase):
         pca.makeConfusionMatrix()
         
         pca.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), title='PCA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
-        pca.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'), title='PCA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
+        pca.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'), title='PCA Logistic Regression (Test Set)', xlabel='PC1', ylabel='PC2')
     
 
     def test_LDA(self):
         lda = dr.LDA_()
         instance = 'lda'
         
-        lda.importDataset('Wine.csv', 0, 13, 13)
+        lda.importDataset1('Wine.csv', 0, 13, 13)
         
-        lda.splitInfoTrainingAndTestSets(test_size=0.2, random_state=0)
+        lda.splitIntoTrainingAndTestSets(test_size=0.2, random_state=0)
         
         lda.scaleFeatures2()
         
@@ -56,7 +56,7 @@ class TestDimensionalityReduction(TestCase):
         lda.makeConfusionMatrix()
         
         lda.visualizeTrainingSetResults(tuple_colors = ('red', 'green', 'blue'), title='LDA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
-        lda.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'), title='LDA Logistic Regression (Training Set)', xlabel='PC1', ylabel='PC2')
+        lda.visualizeTestSetResults(tuple_colors = ('red', 'green', 'blue'), title='LDA Logistic Regression (Test Set)', xlabel='PC1', ylabel='PC2')
     
 
     def test_KernelPCA(self):
@@ -65,7 +65,7 @@ class TestDimensionalityReduction(TestCase):
         
         k_pca.importDataset2('Social_Network_Ads.csv', [2, 3], 4)
         
-        k_pca.splitInfoTrainingAndTestSets(test_size=0.25, random_state=0)
+        k_pca.splitIntoTrainingAndTestSets(test_size=0.25, random_state=0)
         
         k_pca.scaleFeatures2()
         
