@@ -28,15 +28,15 @@ class ANN(NN):
         super(ANN, self).__init__()
         
     def build(self):
-        self.classifier = Sequential()
-        self.classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 11))
-        self.classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu'))
-        self.classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
-        self.classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-        return self.classifier
+        self.classifier = self.actuallyBuild()
     
-    def compileNN(self, **kwargs):
-        self.classifier.compile(**kwargs)
+    def actuallyBuild(self):
+        classifier = Sequential()
+        classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu', input_dim = 11))
+        classifier.add(Dense(units = 6, kernel_initializer = 'uniform', activation = 'relu'))
+        classifier.add(Dense(units = 1, kernel_initializer = 'uniform', activation = 'sigmoid'))
+        classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
+        return classifier
         
     def fitToTrainingSet(self, **kwargs):
         self.classifier.fit(self.X_train, self.y_train, **kwargs)
@@ -51,14 +51,15 @@ class ANN(NN):
         
     def evaluate(self):
         # override when inherit this class
-        classifier = KerasClassifier(build_fn = self.build, batch_size = 10, epochs = 100)
+        classifier = KerasClassifier(build_fn = self.actuallyBuild, batch_size = 10, epochs = 100)
         accuracies = cross_val_score(estimator = classifier, X = self.X_train, y = self.y_train, cv = 10, n_jobs = -1)
         self.mean = accuracies.mean()
         self.variance = accuracies.std()
         
     def improve(self):
         # override when inherit this class
-        classifier = KerasClassifier(build_fn = self.build)
+        #drop out regularization to reduce overfitting if needed
+        classifier = KerasClassifier(build_fn = self.actuallyBuild)
         parameters = {'batch_size': [25, 32],
                       'epochs': [100, 500],
                       'optimizer': ['adam', 'rmsprop']}
@@ -106,30 +107,33 @@ class CNN(ANN):
         # Step 4 - Full connection
         self.classifier.add(Dense(units = 128, activation = 'relu'))
         self.classifier.add(Dense(units = 1, activation = 'sigmoid'))
+    
+    def compileNN(self, **kwargs):
+        self.classifier.compile(**kwargs)
         
     def fitToImages(self):
         # overrride when inherit
         train_datagen = ImageDataGenerator(rescale = 1./255,
-                                   shear_range = 0.2,
-                                   zoom_range = 0.2,
-                                   horizontal_flip = True)
+                                           shear_range = 0.2,
+                                           zoom_range = 0.2,
+                                           horizontal_flip = True)
         
         test_datagen = ImageDataGenerator(rescale = 1./255)
         
-        training_set = train_datagen.flow_from_directory('dataset/training_set',
+        self.training_set = train_datagen.flow_from_directory('dataset/training_set',
                                                          target_size = (64, 64),
                                                          batch_size = 32,
                                                          class_mode = 'binary')
         
-        test_set = test_datagen.flow_from_directory('dataset/test_set',
+        self.test_set = test_datagen.flow_from_directory('dataset/test_set',
                                                     target_size = (64, 64),
                                                     batch_size = 32,
                                                     class_mode = 'binary')
         
-        self.classifier.fit_generator(training_set,
+        self.classifier.fit_generator(self.training_set,
                                  samples_per_epoch = 8000,
                                  nb_epoch = 25,
-                                 validation_data = test_set,
+                                 validation_data = self.test_set,
                                  nb_val_samples = 2000)
         
     def makeNewPrediction(self):
@@ -138,7 +142,8 @@ class CNN(ANN):
         test_image = image.img_to_array(test_image)
         test_image = np.expand_dims(test_image, axis = 0)
         result = self.classifier.predict(test_image)
-        self.training_set.class_indices
+        #what is this line for
+        #self.training_set.class_indices
         if result[0][0] == 1:
             self.prediction = 'dog'
         else:
