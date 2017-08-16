@@ -69,7 +69,6 @@ class ReducedBoltzmannMachines(DataPreProcessing, DataPostProcessing):
             self.a += torch.sum((ph0 - phk), 0)
             
     def convertIntoBinary(self):
-        # override
         #1==Liked, 0==Not Liked
         self.training_set[self.training_set == 0] = -1
         self.training_set[self.training_set == 1] = 0
@@ -149,26 +148,6 @@ class AutoEncoder(DataPreProcessing, DataPostProcessing):
         self.sae = self.SAE()
         self.criterion = nn.MSELoss()
         self.optimizer = optim.RMSprop(self.sae.parameters(), lr = 0.01, weight_decay = 0.5)
-        """
-        # Creating the architecture of the Neural Network
-        class SAE(nn.Module):
-            def __init__(self, ):
-                super(SAE, self).__init__()
-                self.fc1 = nn.Linear(nb_movies, 20)
-                self.fc2 = nn.Linear(20, 10)
-                self.fc3 = nn.Linear(10, 20)
-                self.fc4 = nn.Linear(20, nb_movies)
-                self.activation = nn.Sigmoid()
-            def forward(self, x):
-                x = self.activation(self.fc1(x))
-                x = self.activation(self.fc2(x))
-                x = self.activation(self.fc3(x))
-                x = self.fc4(x)
-                return x
-            self.sae = SAE()
-            self.criterion = nn.MSELoss()
-            self.optimizer = optim.RMSprop(sae.parameters(), lr = 0.01, weight_decay = 0.5)
-        """
         
     def train(self, nb_epoch):
         for epoch in range(1, nb_epoch + 1):
